@@ -4,6 +4,11 @@ const UsuarioSchema = Schema({
     type: String,
     required: [true, "el nombre es obligatorio"],
   },
+  correo:{
+      type:String,
+      required :[true,'l correo es obligatorio'],
+      unique:true
+  },
   password: {
     type: String,
     required: [true, "el password es obligatorio"],
@@ -25,5 +30,10 @@ const UsuarioSchema = Schema({
     default: false,
   },
 });
+
+UsuarioSchema.methods.toJSON = function() {
+    const { __v, password, ...usuario  } = this.toObject();
+    return usuario;
+}
 
 module.exports = model("usuario", UsuarioSchema);

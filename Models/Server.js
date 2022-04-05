@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-const { dbConnection } = require("../database/config.db");
+const { dbConnection }=require('../database/config.db')
 class Server {
   constructor() {
     this.app = express();
@@ -11,9 +11,10 @@ class Server {
   }
 
   //conectar a la base de datos
-  async ConnectDb() {
-    await dbConnection();
+  async ConnectDb(){
+      await dbConnection();
   }
+
 
   //Middlewares
 
