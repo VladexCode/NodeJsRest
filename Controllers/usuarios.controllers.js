@@ -1,7 +1,8 @@
 const { response } = require("express");
 const { request } = require("express");
+const bcryptjs = require("bcryptjs");
+
 const usuarioModel = require("../Models/usuario.model");
-//const Usuario = require('../Models/usuario.model');
 
 const UsuariosGet = function (req, res) {
   const query = req.query;
@@ -20,12 +21,17 @@ const UsuariosPost = async function (req = request, res = response) {
     //body
   });*/
 
-  const body = req.body;
-  const Usuario = new usuarioModel(body);
+  const { password, ...resto } = req.body;
+  const Usuario = new usuarioModel({ password, ...resto });
+
+  //encriptar password
+  const salt = bcryptjs.genSaltSync(11);
+  Usuario.password = bcryptjs.hashSync(password, salt);
+
   //agregamos el registro en la db
   await Usuario.save();
   res.status(201).json({
-    msg: "registrado correectamente",
+    msg: "registrado correctamente",
     Usuario,
   });
 };
