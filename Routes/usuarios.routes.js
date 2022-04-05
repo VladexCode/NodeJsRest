@@ -15,6 +15,8 @@ const {
   emailExiste,
   existeUsuarioPorId,
 } = require("../helpers/validaciones.helper");
+const { validarJWT } = require("../middlewares/validar-jwt.middleware");
+const { esAdminRole, tieneRole } = require("../middlewares/validar-role.middleware");
 const { validarCampos } = require("../middlewares/validar-usuario.middleware");
 const roleModel = require("../Models/role.model");
 
@@ -22,10 +24,10 @@ router.get("/", UsuariosGet);
 router.post(
   "/",
   [
-    check("nombre", "eel nombre es obligatorio").not().isEmpty(),
+    check("nombre", "el nombre es obligatorio").not().isEmpty(),
     check("password", "El password debe tenr 3 letras").isLength({ min: 3 }),
     check("correo", "el correo no ees valido").isEmail(),
-    check("rol", "No es un rol valido").isIn(["ADMIN", "USER"]),
+    //check("rol", "No es un rol valido").isIn(["ADMIN", "USER"]),
     check("correo").custom(emailExiste),
     // check('rol', 'No es un rol válido').isIn(['ADMIN_ROLE','USER_ROLE']),
     check("rol").custom(esRoleValido),
@@ -42,6 +44,9 @@ router.post(
 router.delete(
   "/:id",
   [
+    validarJWT,
+    //esAdminRole, //tiene que ser administrador
+    tieneRole('ADMIN','USER'),
     check("id", "No es un ID válido").isMongoId(),
     check("id").custom(existeUsuarioPorId),
     validarCampos,

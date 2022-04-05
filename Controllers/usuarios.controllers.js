@@ -21,7 +21,7 @@ const UsuariosGet = async function (req, res) {
 };
 
 const UsuariosPost = async function (req = request, res = response) {
-  const { password, correo, ...resto } = req.body;
+  const { password, ...resto } = req.body;
   const Usuario = new usuarioModel({ password, ...resto });
 
   //encriptar password
@@ -29,7 +29,7 @@ const UsuariosPost = async function (req = request, res = response) {
   Usuario.password = bcryptjs.hashSync(password, salt);
 
   //verificamos si existe el email
-  const existeEmail = usuarioModel.findOne({ correo });
+  //const existeEmail = usuarioModel.findOne({ correo });
 
   //agregamos el registro en la db
   await Usuario.save();
@@ -49,12 +49,13 @@ const UsuariosDelete = async function (req, res) {
 
   const usuario = await usuarioModel.findByIdAndUpdate(id, { estado: false });
 
+  //const usuarioAutenticado=req.usuario;
   res.json(usuario);
 };
 
 const UsuariosPut = async function (req, res) {
 
-  const { id } = req.params;
+    const { id } = req.params;
   const { _id, password, google, correo, ...resto } = req.body;
 
   if (password) {
@@ -69,7 +70,6 @@ const UsuariosPut = async function (req, res) {
     usuario,
   });
 };
-
 
 const UsuariosPatch = function (req, res) {
   res.send("patch World");
