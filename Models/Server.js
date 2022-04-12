@@ -34,7 +34,11 @@ class Server {
   rutas() {
     this.app.use("/user", require("../Routes/usuarios.routes"));
     this.app.use("/auth", require("../Routes/auth.routes"));
-  
+    this.app.use("/productos", require('../Routes/productos.routes'));
+
+
+    this.app.use( "/buscar", require('../Routes/buscar.routes'));
+    this.app.use( "/categorias", require('../Routes/categorias.routes'));
 }
   //Listen
 
